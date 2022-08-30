@@ -52,14 +52,27 @@
 #
 # print(monty_hall.open_the_door(False))
 
+def check_symbol(symbol):
+    punctuation = [',', '.', '!', '?', ';', ':', '-', '(', ')', '"', '=', '+', '«', '–', '№']
+    if symbol not in punctuation and not symbol.isdigit():
+        return True
+    return False
+
+
 def read_file(path: str):
     uniq_word = []
     with open(path, 'r', encoding='UTF-8') as file:
-        for line in file:
-            for word in line.split():
-                uniq_word.append(word.lower())
-    uniq_word = set(uniq_word)
-    uniq_word = list(uniq_word)
+        text = file.read()
+        result = ''
+        for itm in text:
+            if check_symbol(itm):
+                result += itm.lower()
+
+        uniq_word = list(set(result.split()))
+
+        for word in uniq_word:  # убираю лишние предлоги и тд.
+            if len(word) <= 2:
+                uniq_word.remove(word)
     return uniq_word
 
 
@@ -69,6 +82,7 @@ def save_file(path: str, text: list):
         text.sort()
         for itm in text:
             file.write(itm + '\n')
+    return True
 
 
 if __name__ == '__main__':
